@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lan="es">
+<head>
+<meta charset="utf-8">
+	<title>Sencillo pe</title>
+</head>
+<body>
+<script type="text/template" id="vista">
+	<strong > Variable:</strong> <%= textovar  %>
+</script>
+
+<script type="text/template" id="autores">
+	<% personajes.forEach(function(m){ %>
+	<div class="template-personaje">
+		<h4><%= m.get('fullName') %></h4>
+		<div class='bio'><%= m.get('biografia') %></div>
+	</div>
+	<% }) %>
+</script>
+
+<script src="js/lib/jquery.js"></script>
+  <script src="js/lib/underscore-min.js"></script>
+  <script src="js/lib/backbone-min.js"></script>
+
+
+<div id="juan">
+
+</div>
+
+<div id='personajes'></div>
+<div class='bio'> Soy una bio</div>
+<script type="text/javascript">
+		var app = app || {};
+
+		app.modelo = Backbone.Model.extend({
+			defaults : {
+				fullName: '',
+				biografia: ''
+			}
+		});
+
+		app.coleccion = Backbone.Collection.extend({
+			model: app.modelo
+		});
+
+		personajes = new app.coleccion();
+		personajes.add(new app.modelo({fullName: 'kiyosaki', biografia:'un rico chino y rico'}));
+		personajes.add(new app.modelo({fullName: 'saks', biografia:'un javascript dev'}));
+		personajes.add(new app.modelo({fullName: 'Borges', biografia:'otro pta'}));
+
+
+		app.PersonajeView = Backbone.View.extend({
+			el : '#personajes',
+			template : _.template($('#autores').html()),
+			events: {
+				'click .bio': 'mostrarVio'
+			},
+			mostrarVio : function (event ){
+				alert(event.target.innerHTML);
+			},
+			render: function(){
+				// var modelin  = new app.modelo();
+				// modelin.set('fullName', 'vargas llosa');
+				// modelin.set('biografia', 'es peruano, y anda divorsiado');
+
+				this.$el.html(this.template(personajes));
+			}
+		});
+
+		app.AppView = Backbone.View.extend({
+			el  : "#juan",
+
+			varTemplate : _.template($("#vista").html()),
+			render: function(){
+				var personaje = new app.PersonajeView();
+				this.$el.html(this.varTemplate({textovar: ' un barsito'}));
+				personaje.render();
+			}
+		});
+
+	$(function(){
+		var a = new app.AppView()
+		a.render();
+
+	});
+</script>
+</body>
+</html>
