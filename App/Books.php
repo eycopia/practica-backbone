@@ -12,15 +12,17 @@ class Books {
 
 	public function all(){
 		$result = $this->db->query("select * from book");
-		$data =  $result->fetchArray(SQLITE3_ASSOC);
+		$data =  array();
+		while($res = $result->fetchArray(SQLITE3_ASSOC)){
+			$data[] = $res;
+        }
 		$this->db->close();
 		return $data;
 	}
 
-	public function add($datos){
-		echo "<pre>";print_r($datos);exit;
+	public function add($data){
 		$this->db->exec("INSERT INTO book (rowid, title, author, release_date, keywords)
-		 VALUES (null, 'Un titulo', 'un autor', '2017-05-03', 'un libro')");
+		 VALUES (null, '{$data['title']}', '{$data['author']}', '{$data['release_date']}', '{$data['keywords']}')");
 	}
 
 	public function delete($id){

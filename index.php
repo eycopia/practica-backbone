@@ -40,9 +40,9 @@ $app->get('/api/books/{id}', function (Request $request, Response $response, $ar
 });
 $app->post('/api/books', function (Request $request, Response $response) {
     $b = new \App\Books();
- 	return $response->withJson($b->delete($_POST));
+    // print_r($request);exit;
+ 	return $response->withJson($b->add($request->getParsedBody()));
 });
-
 
 $app->delete('/api/books/{id}', function (Request $request, Response $response, $args) {
     $b = new \App\Books();
